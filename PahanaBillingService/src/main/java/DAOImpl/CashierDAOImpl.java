@@ -13,7 +13,7 @@ public class CashierDAOImpl implements CashierDAO {
     @Override
     public List<Cashier> getAll() {
         List<Cashier> cashiers = new ArrayList<>();
-        String query = "SELECT * FROM cashier WHERE status = 1";
+        String query = "SELECT * FROM cashier"; // Removed WHERE status = 1
         try (Connection con = DBConnection.getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -39,7 +39,7 @@ public class CashierDAOImpl implements CashierDAO {
     @Override
     public Cashier getById(int id) {
         Cashier cashier = null;
-        String query = "SELECT * FROM cashier WHERE id = ? AND status = 1";
+        String query = "SELECT * FROM cashier WHERE id = ?"; // Removed AND status = 1
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
             ps.setInt(1, id);
@@ -74,6 +74,26 @@ public class CashierDAOImpl implements CashierDAO {
             ps.setString(4, cashier.getAddress());
             ps.setString(5, cashier.getGender());
             ps.setString(6, cashier.getPassword());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean update(Cashier cashier) {
+        String query = "UPDATE cashier SET full_name = ?, email = ?, phone_number = ?, address = ?, gender = ?, password = ?, status = ? WHERE id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, cashier.getFullName());
+            ps.setString(2, cashier.getEmail());
+            ps.setString(3, cashier.getPhoneNumber());
+            ps.setString(4, cashier.getAddress());
+            ps.setString(5, cashier.getGender());
+            ps.setString(6, cashier.getPassword());
+            ps.setBoolean(7, cashier.isStatus());
+            ps.setInt(8, cashier.getId());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
