@@ -78,4 +78,23 @@ public class BookDAOImpl implements BookDAO {
             return false;
         }
     }
+
+    @Override
+    public boolean update(Book book) {
+        String query = "UPDATE book SET image_path = ?, name = ?, author = ?, isbn = ?, price = ?, quantity = ? WHERE id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, book.getImagePath());
+            ps.setString(2, book.getName());
+            ps.setString(3, book.getAuthor());
+            ps.setString(4, book.getIsbn());
+            ps.setInt(5, book.getPrice());
+            ps.setInt(6, book.getQuantity());
+            ps.setInt(7, book.getId());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
