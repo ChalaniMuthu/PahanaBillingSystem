@@ -8,4 +8,5 @@ public interface CashierDAO {
     Cashier getById(int id);
     boolean add(Cashier cashier);
     boolean update(Cashier cashier);
+    boolean delete(int id);
 }

@@ -13,7 +13,7 @@ public class CashierDAOImpl implements CashierDAO {
     @Override
     public List<Cashier> getAll() {
         List<Cashier> cashiers = new ArrayList<>();
-        String query = "SELECT * FROM cashier"; // Removed WHERE status = 1
+        String query = "SELECT * FROM cashier";
         try (Connection con = DBConnection.getConnection();
              Statement stmt = con.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -39,7 +39,7 @@ public class CashierDAOImpl implements CashierDAO {
     @Override
     public Cashier getById(int id) {
         Cashier cashier = null;
-        String query = "SELECT * FROM cashier WHERE id = ?"; // Removed AND status = 1
+        String query = "SELECT * FROM cashier WHERE id = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
             ps.setInt(1, id);
@@ -95,6 +95,21 @@ public class CashierDAOImpl implements CashierDAO {
             ps.setBoolean(7, cashier.isStatus());
             ps.setInt(8, cashier.getId());
             return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(int id) {
+        String query = "DELETE FROM cashier WHERE id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Rows deleted: " + rowsAffected); // Debug output
+            return rowsAffected > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

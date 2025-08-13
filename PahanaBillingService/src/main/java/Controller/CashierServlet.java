@@ -27,7 +27,7 @@ public class CashierServlet {
                     System.out.println("Error: Email must contain '@'.");
                     continue;
                 }
-                if (isEmailDuplicate(email, 0)) { // 0 indicates new cashier (no ID yet)
+                if (isEmailDuplicate(email, 0)) {
                     System.out.println("Error: Email already exists.");
                     continue;
                 }
@@ -42,7 +42,7 @@ public class CashierServlet {
                     System.out.println("Error: Phone must be 10 digits and start with 0.");
                     continue;
                 }
-                if (isPhoneDuplicate(phone, 0)) { // 0 indicates new cashier
+                if (isPhoneDuplicate(phone, 0)) {
                     System.out.println("Error: Phone number already exists.");
                     continue;
                 }
@@ -104,7 +104,7 @@ public class CashierServlet {
                     System.out.println("Error: Email must contain '@'.");
                     continue;
                 }
-                if (isEmailDuplicate(email, id)) { // Exclude current cashier's ID
+                if (isEmailDuplicate(email, id)) {
                     System.out.println("Error: Email already exists.");
                     continue;
                 }
@@ -120,7 +120,7 @@ public class CashierServlet {
                     System.out.println("Error: Phone must be 10 digits and start with 0.");
                     continue;
                 }
-                if (isPhoneDuplicate(phone, id)) { // Exclude current cashier's ID
+                if (isPhoneDuplicate(phone, id)) {
                     System.out.println("Error: Phone number already exists.");
                     continue;
                 }
@@ -161,7 +161,28 @@ public class CashierServlet {
         promptBack();
     }
 
-    // Simulate getting a cashier by ID (updated to show all statuses)
+    // Simulate deleting a cashier (hard delete)
+    public void deleteCashier() {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter ID of Cashier to Delete: ");
+            int id = Integer.parseInt(reader.readLine().trim());
+            Cashier cashier = cashierDAO.getById(id);
+            if (cashier == null) {
+                System.out.println("Cashier not found.");
+            } else {
+                boolean success = cashierDAO.delete(id);
+                System.out.println("Delete successful: " + success + " (Record removed from database)");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid ID format.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        promptBack();
+    }
+
+    // Simulate getting a cashier by ID
     public void getCashierById() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -181,7 +202,7 @@ public class CashierServlet {
         promptBack();
     }
 
-    // Simulate getting all cashiers (updated to show all statuses)
+    // Simulate getting all cashiers
     public void getAllCashiers() {
         List<Cashier> cashiers = cashierDAO.getAll();
         if (cashiers != null && !cashiers.isEmpty()) {
@@ -241,8 +262,9 @@ public class CashierServlet {
             System.out.println("2. Edit Cashier");
             System.out.println("3. Get Cashier By ID");
             System.out.println("4. Get All Cashiers");
-            System.out.println("5. Exit");
-            System.out.print("Enter choice (1-5): ");
+            System.out.println("5. Delete Cashier");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice (1-6): ");
 
             try {
                 int choice = Integer.parseInt(reader.readLine().trim());
@@ -260,13 +282,16 @@ public class CashierServlet {
                         servlet.getAllCashiers();
                         break;
                     case 5:
+                        servlet.deleteCashier();
+                        break;
+                    case 6:
                         System.out.println("Exiting...");
                         return;
                     default:
-                        System.out.println("Invalid choice. Please enter 1-5.");
+                        System.out.println("Invalid choice. Please enter 1-6.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number (1-5).");
+                System.out.println("Invalid input. Please enter a number (1-6).");
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
