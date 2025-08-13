@@ -11,7 +11,7 @@ import java.util.List;
 public class CashierServlet {
     private final CashierDAO cashierDAO = new CashierDAOImpl();
 
-    // Simulate adding a cashier with interactive input and validation
+    // Simulate adding a cashier with interactive input
     public void addCashier() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
