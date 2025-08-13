@@ -8,4 +8,5 @@ public interface BookDAO {
     Book getById(int id);
     boolean add(Book book);
     boolean update(Book book);
+    boolean delete(int id);
 }

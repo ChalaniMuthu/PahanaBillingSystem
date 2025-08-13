@@ -199,6 +199,27 @@ public class BookServlet {
         promptBack();
     }
 
+    // Simulate deleting a book
+    public void deleteBook() {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter ID of Book to Delete: ");
+            int id = Integer.parseInt(reader.readLine().trim());
+            Book book = bookDAO.getById(id);
+            if (book == null) {
+                System.out.println("Book not found.");
+            } else {
+                boolean success = bookDAO.delete(id);
+                System.out.println("Delete successful: " + success + " (Record removed from database)");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid ID format.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        promptBack();
+    }
+
     // Simulate getting a book by ID
     public void getBookById() {
         try {
@@ -279,8 +300,9 @@ public class BookServlet {
             System.out.println("2. Get Book By ID");
             System.out.println("3. Get All Books");
             System.out.println("4. Update Book");
-            System.out.println("5. Exit");
-            System.out.print("Enter choice (1-5): ");
+            System.out.println("5. Delete Book");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice (1-6): ");
 
             try {
                 int choice = Integer.parseInt(reader.readLine().trim());
@@ -298,13 +320,16 @@ public class BookServlet {
                         servlet.updateBook();
                         break;
                     case 5:
+                        servlet.deleteBook();
+                        break;
+                    case 6:
                         System.out.println("Exiting...");
                         return;
                     default:
-                        System.out.println("Invalid choice. Please enter 1-5.");
+                        System.out.println("Invalid choice. Please enter 1-6.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number (1-5).");
+                System.out.println("Invalid input. Please enter a number (1-6).");
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }

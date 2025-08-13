@@ -97,4 +97,19 @@ public class BookDAOImpl implements BookDAO {
             return false;
         }
     }
+
+    @Override
+    public boolean delete(int id) {
+        String query = "DELETE FROM book WHERE id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Rows deleted: " + rowsAffected); // Debug output
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
